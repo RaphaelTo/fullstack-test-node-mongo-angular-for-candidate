@@ -2,8 +2,12 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 
+import { connectAtMongoDB } from '@/Config/config';
+
 const PORT: number = +process.env.PORT! || 3000;
 const app: express.Application = express();
+
+connectAtMongoDB();
 
 app.use(helmet());
 app.use(cors());
