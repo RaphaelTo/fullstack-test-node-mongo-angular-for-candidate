@@ -1,0 +1,6 @@
+/back/dist
+/back/node_modules
+/back/.env
+.vscode/
+.DS_STORE
+/.DS_STORE
