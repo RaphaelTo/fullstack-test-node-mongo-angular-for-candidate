@@ -16,4 +16,18 @@ interface UpdateProductValidator {
 	stock: boolean;
 }
 
-export { ProductValidator, IdProductValidator, UpdateProductValidator };
+interface FindFilterProductValidator {
+	name: string;
+	minPrice: number;
+	maxPrice: number;
+	stock: string;
+	minDate: string;
+	maxDate: string;
+}
+
+export {
+	ProductValidator,
+	IdProductValidator,
+	UpdateProductValidator,
+	FindFilterProductValidator,
+};
