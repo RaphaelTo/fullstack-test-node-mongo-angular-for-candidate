@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 
 import {
+	getAllProduct,
 	getProductById,
 	addProduct,
 	deleteProduct,
@@ -11,16 +12,17 @@ import {
 	addProductValidator,
 	idProductValidator,
 	updateProductValidator,
+	findProductQueryValidator,
 } from '@/Validators/Product';
 import {
 	ProductValidator,
 	IdProductValidator,
 	UpdateProductValidator,
+	FindFilterProductValidator,
 } from '@/Interfaces/validators/Product';
 import { objectValidator } from '@/Types/middlewares/validator';
 
 import { validatorParamsBodyQueries } from '@/Middlewares/validator';
-import { checkSession } from '@/Middlewares/session';
 
 import { errorResponse, successResponse } from '@/Utils/responses';
 
@@ -41,10 +43,28 @@ const validatorUpdateProductSchema: objectValidator<UpdateProductValidator> = {
 	schema: updateProductValidator,
 };
 
+const validatorFindFilterProductSchema: objectValidator<FindFilterProductValidator> =
+	{
+		type: 'query',
+		schema: findProductQueryValidator,
+	};
+
 routerProduct
 	.get(
+		'/product',
+		validatorParamsBodyQueries([validatorFindFilterProductSchema]),
+		async (req, res) => {
+			try {
+				const allProduct = await getAllProduct(req.decoded.id, req.query);
+
+				res.status(200).json(successResponse(200, allProduct));
+			} catch (err: any) {
+				res.status(404).json(errorResponse(404, err.message));
+			}
+		},
+	)
+	.get(
 		'/product/:idProduct',
-		checkSession,
 		validatorParamsBodyQueries([validatorIdProductProductSchema]),
 		async (req, res) => {
 			try {
@@ -54,14 +74,13 @@ routerProduct
 				);
 
 				res.status(200).json(successResponse(200, getProduct));
-			} catch (err) {
+			} catch (err: any) {
 				res.status(404).json(errorResponse(404, err.message));
 			}
 		},
 	)
 	.post(
 		'/product',
-		checkSession,
 		validatorParamsBodyQueries([validatorAddProductSchema]),
 		async (req, res) => {
 			try {
@@ -75,7 +94,6 @@ routerProduct
 	)
 	.delete(
 		'/product/:idProduct',
-		checkSession,
 		validatorParamsBodyQueries([validatorIdProductProductSchema]),
 		async (req, res) => {
 			try {
@@ -92,7 +110,6 @@ routerProduct
 	)
 	.put(
 		'/product/:idProduct',
-		checkSession,
 		validatorParamsBodyQueries([
 			validatorUpdateProductSchema,
 			validatorIdProductProductSchema,
