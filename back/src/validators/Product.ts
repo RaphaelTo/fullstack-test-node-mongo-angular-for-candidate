@@ -1,5 +1,8 @@
 import { JSONSchemaType } from 'ajv';
-import { ProductValidator } from '@/Interfaces/validators/Product';
+import {
+	ProductValidator,
+	DeleteProductValidator,
+} from '@/Interfaces/validators/Product';
 
 const addProductValidator: JSONSchemaType<ProductValidator> = {
 	type: 'object',
@@ -13,4 +16,13 @@ const addProductValidator: JSONSchemaType<ProductValidator> = {
 	additionalProperties: false,
 };
 
-export { addProductValidator };
+const deleteProductValidator: JSONSchemaType<DeleteProductValidator> = {
+	type: 'object',
+	properties: {
+		idProduct: { type: 'string' },
+	},
+	required: ['idProduct'],
+	additionalProperties: false,
+};
+
+export { addProductValidator, deleteProductValidator };
