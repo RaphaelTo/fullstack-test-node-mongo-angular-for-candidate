@@ -3,7 +3,22 @@ import {
 	ProductValidator,
 	IdProductValidator,
 	UpdateProductValidator,
+	FindFilterProductValidator,
 } from '@/Interfaces/validators/Product';
+
+const findProductQueryValidator: JSONSchemaType<FindFilterProductValidator> = {
+	type: 'object',
+	properties: {
+		name: { type: 'string' },
+		minPrice: { type: 'number' },
+		maxPrice: { type: 'number' },
+		minDate: { type: 'string' },
+		maxDate: { type: 'string' },
+		stock: { type: 'boolean' },
+	},
+	required: [],
+	additionalProperties: false,
+};
 
 const addProductValidator: JSONSchemaType<ProductValidator> = {
 	type: 'object',
@@ -38,4 +53,9 @@ const updateProductValidator: JSONSchemaType<UpdateProductValidator> = {
 	additionalProperties: false,
 };
 
-export { addProductValidator, idProductValidator, updateProductValidator };
+export {
+	addProductValidator,
+	idProductValidator,
+	updateProductValidator,
+	findProductQueryValidator,
+};
