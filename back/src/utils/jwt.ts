@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import util from 'util';
 
+type promisifyVerify = (arg: string, arg2: string) => Promise<object>;
+
 const createToken = async (payload: object): Promise<string> => {
 	try {
 		const secret: string = process.env.SECRET_TOKEN!;
@@ -16,7 +18,7 @@ const createToken = async (payload: object): Promise<string> => {
 
 const verifyToken = async (token: string, secret: string): Promise<object> => {
 	try {
-		const promisifyVerify = util.promisify<string, string>(jwt.verify);
+		const promisifyVerify: promisifyVerify = util.promisify(jwt.verify);
 
 		const checkToken = await promisifyVerify(token, secret);
 		return checkToken;
