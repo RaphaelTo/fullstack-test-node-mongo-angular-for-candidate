@@ -1,4 +1,5 @@
 import express, { Router } from 'express';
+import dayjs from 'dayjs';
 
 import { signupAction, signinAction } from '@/Controllers/Account';
 
@@ -19,8 +20,7 @@ const validatorSchema: objectValidator<AccountValidator> = {
 routerAccount
 	.post(
 		'/signup',
-		(req, res, next) =>
-			validatorParamsBodyQueries(req, res, next)([validatorSchema]),
+		validatorParamsBodyQueries([validatorSchema]),
 		async (req, res) => {
 			try {
 				const addAccount = await signupAction(req.body);
@@ -32,11 +32,19 @@ routerAccount
 	)
 	.post(
 		'/signin',
-		(req, res, next) =>
-			validatorParamsBodyQueries(req, res, next)([validatorSchema]),
+		validatorParamsBodyQueries([validatorSchema]),
 		async (req, res) => {
 			try {
 				const login = await signinAction(req.body);
+				res.cookie(
+					'xAccessToken',
+					{ token: login },
+					{
+						secure: process.env.NODE_ENV !== 'development',
+						httpOnly: true,
+						expires: dayjs().add(10, 'hour').toDate(),
+					},
+				);
 				res.json(successResponse(201, login));
 			} catch (err: any) {
 				return res.json(errorResponse(404, err.message));
