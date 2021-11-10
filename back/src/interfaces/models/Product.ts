@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-interface Product {
+interface ProductValidator {
 	name: string;
 	description: string;
 	price: number;
@@ -10,4 +10,4 @@ interface Product {
 	idAccount: mongoose.Schema.Types.ObjectId;
 }
 
-export { Product };
+export { ProductValidator };
