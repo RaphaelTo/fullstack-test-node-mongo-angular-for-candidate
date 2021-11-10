@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Account } from '@/Interfaces/Account';
+import { Account } from '@/Interfaces/models/Account';
 
 const accountSchema = new mongoose.Schema<Account>(
 	{
