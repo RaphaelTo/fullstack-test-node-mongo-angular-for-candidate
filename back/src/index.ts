@@ -4,6 +4,8 @@ import morgan from 'morgan';
 import cors from 'cors';
 import coookieParser from 'cookie-parser';
 
+import { checkSession } from '@/Middlewares/session';
+
 import { connectAtMongoDB } from '@/Config/config';
 
 import { routerAccount } from '@/Routes/Account';
@@ -22,6 +24,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(coookieParser());
 
 app.use(`${process.env.URL_API}/account`, routerAccount);
-app.use(`${process.env.URL_API}/products`, routerProduct);
+app.use(`${process.env.URL_API}/products`, checkSession, routerProduct);
 
 app.listen(PORT, () => console.log(`Server is running in port ${PORT}`));
