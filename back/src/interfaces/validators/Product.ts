@@ -5,4 +5,8 @@ interface ProductValidator {
 	stock: boolean;
 }
 
-export { ProductValidator };
+interface DeleteProductValidator {
+	idProduct: string;
+}
+
+export { ProductValidator, DeleteProductValidator };
