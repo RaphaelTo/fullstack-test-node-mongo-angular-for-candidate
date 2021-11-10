@@ -6,4 +6,5 @@ export interface EnvVariable extends NodeJS.ProcessEnv {
 	DATABASE_ROOT_PASSWORD?: string;
 	PORT?: string;
 	URL_API?: string;
+	SECRET_TOKEN?: string;
 }
