@@ -5,6 +5,20 @@ import Product from '@/Models/Product';
 import { ProductValidator } from '@/Interfaces/validators/Product';
 import { updateParamProduct } from '@/Types/controllers/product';
 
+const getProductById = async (idProduct: string, idAccount: string) => {
+	try {
+		const getProduct = await checkProductExist({ idProduct, idAccount });
+
+		if (!getProduct) {
+			throw new Error('product not found');
+		}
+
+		return getProduct;
+	} catch (err) {
+		throw err;
+	}
+};
+
 const addProduct = async (
 	productParam: ProductValidator,
 	idAccount: string,
@@ -88,4 +102,4 @@ const checkProductExist = async (params: {
 	}
 };
 
-export { addProduct, deleteProduct, updateProduct };
+export { getProductById, addProduct, deleteProduct, updateProduct };
