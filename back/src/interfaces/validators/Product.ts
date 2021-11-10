@@ -20,7 +20,7 @@ interface FindFilterProductValidator {
 	name: string;
 	minPrice: number;
 	maxPrice: number;
-	stock: string;
+	stock: boolean;
 	minDate: string;
 	maxDate: string;
 }
