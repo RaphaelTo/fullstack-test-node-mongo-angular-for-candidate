@@ -5,8 +5,15 @@ interface ProductValidator {
 	stock: boolean;
 }
 
-interface DeleteProductValidator {
+interface IdProductValidator {
 	idProduct: string;
 }
 
-export { ProductValidator, DeleteProductValidator };
+interface UpdateProductValidator {
+	name: string;
+	description: string;
+	price: number;
+	stock: boolean;
+}
+
+export { ProductValidator, IdProductValidator, UpdateProductValidator };
