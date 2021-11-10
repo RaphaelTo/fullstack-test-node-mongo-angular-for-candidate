@@ -7,8 +7,8 @@ type filterValidator = {
 };
 
 const validatorParamsBodyQueries =
-	(req: Request, _res: Response, next: NextFunction) =>
-	(schemasValidator: Array<any>) => {
+	(schemasValidator: Array<any>) =>
+	(req: Request, _res: Response, next: NextFunction) => {
 		const ajv: Ajv = new Ajv();
 		const arrayValidate: Array<filterValidator> = schemasValidator
 			.map(schema => {
