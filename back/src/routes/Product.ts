@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 
 import {
+	getProductById,
 	addProduct,
 	deleteProduct,
 	updateProduct,
@@ -41,6 +42,23 @@ const validatorUpdateProductSchema: objectValidator<UpdateProductValidator> = {
 };
 
 routerProduct
+	.get(
+		'/product/:idProduct',
+		checkSession,
+		validatorParamsBodyQueries([validatorIdProductProductSchema]),
+		async (req, res) => {
+			try {
+				const getProduct = await getProductById(
+					req.params.idProduct,
+					req.decoded.id,
+				);
+
+				res.status(200).json(successResponse(200, getProduct));
+			} catch (err) {
+				res.status(404).json(errorResponse(404, err.message));
+			}
+		},
+	)
 	.post(
 		'/product',
 		checkSession,
