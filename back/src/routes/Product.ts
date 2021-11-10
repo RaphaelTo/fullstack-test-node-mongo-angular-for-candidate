@@ -1,14 +1,20 @@
 import express, { Router } from 'express';
 
-import { addProduct, deleteProduct } from '@/Controllers/Product';
+import {
+	addProduct,
+	deleteProduct,
+	updateProduct,
+} from '@/Controllers/Product';
 
 import {
 	addProductValidator,
-	deleteProductValidator,
+	idProductValidator,
+	updateProductValidator,
 } from '@/Validators/Product';
 import {
 	ProductValidator,
-	DeleteProductValidator,
+	IdProductValidator,
+	UpdateProductValidator,
 } from '@/Interfaces/validators/Product';
 import { objectValidator } from '@/Types/middlewares/validator';
 
@@ -24,9 +30,14 @@ const validatorAddProductSchema: objectValidator<ProductValidator> = {
 	schema: addProductValidator,
 };
 
-const validatorDeleteProductSchema: objectValidator<DeleteProductValidator> = {
+const validatorIdProductProductSchema: objectValidator<IdProductValidator> = {
 	type: 'params',
-	schema: deleteProductValidator,
+	schema: idProductValidator,
+};
+
+const validatorUpdateProductSchema: objectValidator<UpdateProductValidator> = {
+	type: 'body',
+	schema: updateProductValidator,
 };
 
 routerProduct
@@ -47,7 +58,7 @@ routerProduct
 	.delete(
 		'/product/:idProduct',
 		checkSession,
-		validatorParamsBodyQueries([validatorDeleteProductSchema]),
+		validatorParamsBodyQueries([validatorIdProductProductSchema]),
 		async (req, res) => {
 			try {
 				const dlProduct = await deleteProduct(
@@ -56,6 +67,25 @@ routerProduct
 				);
 
 				res.status(200).json(successResponse(200, dlProduct));
+			} catch (err: any) {
+				res.status(404).json(errorResponse(404, err.message));
+			}
+		},
+	)
+	.put(
+		'/product/:idProduct',
+		checkSession,
+		validatorParamsBodyQueries([
+			validatorUpdateProductSchema,
+			validatorIdProductProductSchema,
+		]),
+		async (req, res) => {
+			try {
+				const upProduct = await updateProduct(
+					{ idProduct: req.params.idProduct, idAccount: req.decoded.id },
+					req.body,
+				);
+				res.status(200).json(successResponse(200, upProduct));
 			} catch (err: any) {
 				res.status(404).json(errorResponse(404, err.message));
 			}
