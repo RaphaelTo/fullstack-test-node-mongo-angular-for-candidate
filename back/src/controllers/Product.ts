@@ -1,7 +1,9 @@
+import mongoose from 'mongoose';
 import dayjs from 'dayjs';
 import Product from '@/Models/Product';
 
 import { ProductValidator } from '@/Interfaces/validators/Product';
+import { updateParamProduct } from '@/Types/controllers/product';
 
 const addProduct = async (
 	productParam: ProductValidator,
@@ -23,7 +25,7 @@ const addProduct = async (
 	}
 };
 
-const deleteProduct = async (idProduct: string, idAccount: string) => {
+const deleteProduct = async (idProduct: any, idAccount: any) => {
 	try {
 		const checkProduct = await checkProductExist({ idProduct, idAccount });
 
@@ -39,9 +41,36 @@ const deleteProduct = async (idProduct: string, idAccount: string) => {
 	}
 };
 
+const updateProduct = async (
+	paramId: {
+		idProduct: any;
+		idAccount: any;
+	},
+	productToUpdate: updateParamProduct,
+) => {
+	try {
+		const { idProduct, idAccount } = paramId;
+		const dateNow: dayjs.Dayjs = dayjs();
+		const checkProduct = await checkProductExist({ idProduct, idAccount });
+
+		if (!checkProduct) {
+			throw new Error("Product doesn't exist");
+		}
+
+		await Product.updateOne(
+			{ idProduct, idAccount },
+			{ ...productToUpdate, updatedDate: dateNow },
+		);
+
+		return 'Product has been updated';
+	} catch (err) {
+		throw err;
+	}
+};
+
 const checkProductExist = async (params: {
-	idProduct: string;
-	idAccount: string;
+	idProduct: any;
+	idAccount: any;
 }) => {
 	try {
 		const findProduct = await Product.findOne({
@@ -59,4 +88,4 @@ const checkProductExist = async (params: {
 	}
 };
 
-export { addProduct, deleteProduct };
+export { addProduct, deleteProduct, updateProduct };
