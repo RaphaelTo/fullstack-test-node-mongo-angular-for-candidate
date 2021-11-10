@@ -24,7 +24,7 @@ routerAccount
 		async (req, res) => {
 			try {
 				const addAccount = await signupAction(req.body);
-				res.json(successResponse(201, addAccount));
+				res.status(201).json(successResponse(201, addAccount));
 			} catch (err: any) {
 				return res.json(errorResponse(404, err.message));
 			}
@@ -45,7 +45,7 @@ routerAccount
 						expires: dayjs().add(10, 'hour').toDate(),
 					},
 				);
-				res.json(successResponse(201, login));
+				res.status(201).json(successResponse(201, login));
 			} catch (err: any) {
 				return res.json(errorResponse(404, err.message));
 			}

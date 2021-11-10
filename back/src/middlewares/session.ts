@@ -22,7 +22,7 @@ const checkSession = async (
 		req.decoded = checkToken;
 		next();
 	} catch (err: any) {
-		res.json(errorResponse(404, err.message));
+		res.status(404).json(errorResponse(404, err.message));
 	}
 };
 
