@@ -1,6 +1,8 @@
 import Ajv from 'ajv';
 import { NextFunction, Request, Response } from 'express';
 
+import { errorResponse } from '@/Utils/responses';
+
 type filterValidator = {
 	type: 'params' | 'body' | 'query';
 	validate: boolean;
@@ -8,7 +10,7 @@ type filterValidator = {
 
 const validatorParamsBodyQueries =
 	(schemasValidator: Array<any>) =>
-	(req: Request, _res: Response, next: NextFunction) => {
+	(req: Request, res: Response, next: NextFunction) => {
 		const ajv: Ajv = new Ajv();
 		const arrayValidate: Array<filterValidator> = schemasValidator
 			.map(schema => {
@@ -21,7 +23,9 @@ const validatorParamsBodyQueries =
 			.filter(schemaFilter => schemaFilter.validate === false);
 
 		if (arrayValidate.length) {
-			next();
+			return res
+				.status(404)
+				.json(errorResponse(404, 'Error body/params/query'));
 		}
 
 		next();
