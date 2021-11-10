@@ -3,7 +3,63 @@ import dayjs from 'dayjs';
 import Product from '@/Models/Product';
 
 import { ProductValidator } from '@/Interfaces/validators/Product';
-import { updateParamProduct } from '@/Types/controllers/product';
+import {
+	updateParamProduct,
+	paramsId,
+	filterParam,
+} from '@/Types/controllers/product';
+
+const getAllProduct = async (
+	idAccount: string,
+	paramFilter: filterParam,
+): Promise<object[]> => {
+	try {
+		const filter = {};
+
+		if (paramFilter.hasOwnProperty('stock')) {
+			Object.assign(filter, {
+				stock: paramFilter.stock,
+			});
+		}
+
+		if (paramFilter.hasOwnProperty('name')) {
+			Object.assign(filter, {
+				name: paramFilter.name,
+			});
+		}
+
+		if (
+			paramFilter.hasOwnProperty('minDate') &&
+			paramFilter.hasOwnProperty('maxDate')
+		) {
+			Object.assign(filter, {
+				createdDate: { $gte: paramFilter.minDate, $lte: paramFilter.maxDate },
+			});
+		}
+
+		if (
+			paramFilter.hasOwnProperty('minPrice') &&
+			paramFilter.hasOwnProperty('maxPrice')
+		) {
+			Object.assign(filter, {
+				price: { $gte: paramFilter.minPrice, $lte: paramFilter.maxPrice },
+			});
+		}
+
+		const getAllProduct = await Product.find({
+			idAccount,
+			...filter,
+		}).exec();
+
+		if (!getAllProduct.length) {
+			throw new Error('0 product found');
+		}
+
+		return getAllProduct;
+	} catch (err) {
+		throw err;
+	}
+};
 
 const getProductById = async (idProduct: string, idAccount: string) => {
 	try {
@@ -102,4 +158,10 @@ const checkProductExist = async (params: {
 	}
 };
 
-export { getProductById, addProduct, deleteProduct, updateProduct };
+export {
+	getAllProduct,
+	getProductById,
+	addProduct,
+	deleteProduct,
+	updateProduct,
+};
