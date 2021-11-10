@@ -7,6 +7,7 @@ import coookieParser from 'cookie-parser';
 import { connectAtMongoDB } from '@/Config/config';
 
 import { routerAccount } from '@/Routes/Account';
+import { routerProduct } from '@/Routes/Product';
 
 const PORT: number = +process.env.PORT! || 3000;
 const app: express.Application = express();
@@ -21,5 +22,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(coookieParser());
 
 app.use(`${process.env.URL_API}/account`, routerAccount);
+app.use(`${process.env.URL_API}/products`, routerProduct);
 
 app.listen(PORT, () => console.log(`Server is running in port ${PORT}`));
