@@ -9,7 +9,6 @@ const {
 
 module.exports = {
   entry: path.join(__dirname, 'src', 'index.ts'),
-  //entry: './src/server.ts',
   mode: NODE_ENV,
   target: 'node',
   watch: NODE_ENV === 'development',
